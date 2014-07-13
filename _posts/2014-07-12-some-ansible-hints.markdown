@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Some Ansible Notes"
+title: "Some Ansible Hints"
 date: 2014-07-12 21:38:16 +0100
 comments: true
 categories:
@@ -137,4 +137,4 @@ gives you an idea of its age.
 
 ---
 
-Anyway, those are all the hints I have at the moment. Tune in next time!
+Those are all the hints I have at the moment&mdash;tune in next time!
