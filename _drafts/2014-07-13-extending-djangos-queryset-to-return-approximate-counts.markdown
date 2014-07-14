@@ -54,8 +54,9 @@ class ApproxCountQuerySet(QuerySet):
         ):
             cursor = connections[self.db].cursor()
             cursor.execute(
-                "/*ApproxCountQuerySet*/ EXPLAIN SELECT COUNT(*) FROM %s",
-                (self.model._meta.db_table,)
+                "/*ApproxCountQuerySet*/ EXPLAIN SELECT COUNT(*) FROM `{}`".format(
+                    self.model._meta.db_table
+                )
             )
             n = cursor.fetchone()[8]
             if n >= 1000:
