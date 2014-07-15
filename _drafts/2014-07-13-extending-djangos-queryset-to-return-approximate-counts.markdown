@@ -7,30 +7,32 @@ categories:
 ---
 
 I was looking through the
-[MySQL slow_log](http://dev.mysql.com/doc/refman/5.5/en/slow-query-log.html) for
-YPlan and discovered that there were a lot of `SELECT COUNT(*)` queries going
-on, which take a long time and cause a full table scan. These were coming from
-the [Django admin](https://docs.djangoproject.com/en/1.6/ref/contrib/admin/),
-which displays the total count on **every page**.
+[MySQL slow_log](http://dev.mysql.com/doc/refman/5.5/en/slow-query-log.html)
+for [YPlan](http://yplanapp.com) and discovered that there were a lot of
+`SELECT COUNT(*)` queries going on, which take a long time because they require
+a full table scan. These were coming from the
+[Django admin](https://docs.djangoproject.com/en/1.6/ref/contrib/admin/), which
+displays the total count on **every page**.
 
 
 "Why is `SELECT COUNT(*)` such a slow query?" you might think, "surely MySQL
 could just keep a number in the table metadata and update it on INSERT/DELETE."
-Aha! You are *totally* right - for MyISAM tables&mdash;but Innodb (the only
-storage engine that is a sane choice for your app's precious data) provides you
-proper transactional support at the cost of such a metadata value. In the world
-of transactions, you have to be able to isolate one transaction from another,
-hence you can no longer store a single 'accurate' `COUNT(*)` value per table,
-and instead, every time it is requested, a table scan ensues.
+Aha! You are *totally* right - for the MyISAM storage engine. But Innodb, which
+you shoudl be using, provides transacational support and other niceties, at the
+cost of making such a metadata count impossible. Each transaction must be
+isolated from the others until it commits or rolls back, so a single 'accurate'
+`COUNT(*)` value per table is impossible. It would also be a point of
+contention from locking, which MyISAM doesn't care about anyway because it
+locks the *whole table* for any write. Hence, Innodb `COUNT(*)` = table scan.
 
 
-I'm not the only one with this problem, so I googled and found
+Of coures, I wasn't the only one with this problem, and a quick google found me
 [this great blog post](http://www.tablix.org/~avian/blog/archives/2011/07/django_admin_with_large_tables/)
-by 'Avian' in 2011. This post is my update on that for newer Django versions
+by 'Avian' in 2011. This post is my update on that for newer Django versions,
 with some extra knowledge I've gained reading up on MySQL.
 
 
-Here's my take:
+Here's my take on the code:
 
 
 ```python
@@ -61,8 +63,8 @@ class ApproxCountQuerySet(QuerySet):
             n = cursor.fetchone()[8]
             if n >= 1000:
                 return n
-        else:
-            return super(ApproxCountQuerySet, self).count()
+
+        return super(ApproxCountQuerySet, self).count()
 ```
 
 
@@ -75,7 +77,7 @@ A few quick things to point out:
 * We're using [`EXPLAIN`](http://dev.mysql.com/doc/refman/5.5/en/explain.html)
   to get MySQL to return the approximate count. This returns a tabular analysis
   of the query execution plan - including an estimate of the number of rows
-  that will be searched (it may be quite a bit off, I've seen nearly 50% in the
+  that will be searched (it may be quite a bit off, I've seen +-50% in the
   wild). More on `EXPLAIN` below.
 
 * The query has a comment in it - this is good practice for any custom SQL as
@@ -85,15 +87,16 @@ A few quick things to point out:
 * The exact count will still be obtained with the super call if the query is
   any more complex than `MyModel.objects.count()`. This code is just the first
   stage of optimization to remove the worst `SELECT COUNT(*)` queries - most
-  other queries should be able to narrow
+  other queries the ORM generates should be able to narrow the count down using
+  an index if you've gotten your index design right.
 
 
 Why use `EXPLAIN` and not `SHOW TABLE STATUS` as in Avian's blog? Because
 `EXPLAIN` can be used to extract more detailed counts using index reads as well
 - an extension left for the reader (i.e. I haven't needed this yet). But here's
 an example MySQL session showing that `EXPLAIN`ing a simple WHERE clause on an
-indexed column can extract an approximate count too. It's only 100% accurate in this
-case because this table is small (from the example
+indexed column can extract an approximate count too. It's only 100% accurate in
+this case because this table is small (from the example
 [sakila database](http://dev.mysql.com/doc/sakila/en/)):
 
 ```sql
@@ -132,10 +135,10 @@ possible_keys: idx_fk_country_id
 ```
 
 
-My second step in fixing this was to make sure this only applied in the admin
-area of the app, and doesn't affect any business logic which might be relying
-on exact counts. This is easy enough if you're using a custom admin base class
-for every `Admin` class in your app:
+My second step in this fix this was to make sure this only applied in Django's
+admin area, and couldn't affect any logic in other parts of the app which might
+rely on exact counts. This is easy enough if you're using a custom admin base
+class for every `Admin` class in your app:
 
 
 ```python
@@ -147,14 +150,11 @@ class MySuperDuperAdmin(Admin):
 ```
 
 
-The final issue I fixed was cosmetic, and might not apply for you. The admin
-pages will report 'N total', but this may be misleading if someone in your
-organization is using this count for any kind of analytics. Therefore, I added
-a quick hack to make sure the word 'Approximately' is used next to this count,
-without changing the templates (especially tricky if this is a small table
-where the exact count is still returned).
-
-Replacing lines at the end of `ApproxCountQuerySet.count`:
+The final step was a cosmetic fix to make sure the approximate nature of the
+counts is reported to admin users - we wouldn't want anyone misquoting ballpark
+numbers as exact, would we? A quick hack can make sure that if the approximate
+count is used, the templates all say 'Approximately N'. Replacing lines at the
+end of `ApproxCountQuerySet.count`:
 
 ```python
             if n >= 1000:
@@ -167,3 +167,9 @@ class ApproximateInt(int):
     def __str__(self):
         return 'Approximately ' + super(ApproximateInt, self).__str__()
 ```
+
+And here's what the final product looks like at the top of an admin page:
+
+![Django Admin Screenshot]({{ site.baseurl }}/assets/django-admin-approximate-total.png)
+
+Ta-daa!
