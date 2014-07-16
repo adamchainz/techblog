@@ -11,7 +11,6 @@ tagline:          'Hacks'
 description:      'Filled with little coding notes and fixes. Also check out my <a href="http://adamj.eu">main blog</a> for an online magazine experience.'
 url:              http://adamj.eu/tech/
 baseurl:          /tech
-excerpt_separator:<!-- more -->
 
 author:
   name:           'Adam Johnson'
