@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Extending Django's QuerySet to return approximate COUNTs"
-date: 2014-07-13 16:19:16 +0100
+date: 2014-07-16 21:15:16 +0100
 comments: true
 categories:
 ---
@@ -170,6 +170,6 @@ class ApproximateInt(int):
 
 And here's what the final product looks like at the top of an admin page:
 
-![Django Admin Screenshot]({{ site.baseurl }}/assets/django-admin-approximate-total.png)
+![Django Admin Screenshot]({{ site.baseurl }}/assets/2014-07-16-django-admin-approximate-total.png)
 
 Ta-daa!
