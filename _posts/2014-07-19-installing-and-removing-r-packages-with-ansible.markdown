@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Installing and Removing R Packages With Ansible"
-date: 2014-07-16 21:25:16 +0100
+date: 2014-07-19 10:10:00 +0100
 categories:
 ---
 
