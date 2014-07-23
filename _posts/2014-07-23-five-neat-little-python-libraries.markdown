@@ -9,13 +9,14 @@ Here are some great little Python libraries that have made my life (well, at
 least the coding part) a little bit nicer and easier. They mostly add neat
 syntax and a few things that you always wanted to do, but never knew.
 
+
 ## 1. Unipath
 
 **What?**
 
-It's an "object-oriented alternative to os/os.path/shutil".
+It's an “object-oriented alternative to os/os.path/shutil”.
 
-**Show me.**
+**How?**
 
 From the README:
 
@@ -28,9 +29,9 @@ Path("gopherlib.py")
 '.py'
 ```
 
-Basically, if you're fiddling around a lot with `os.path` and other file-
-manipulation functions, you're missing out on this much nicer, arguably more
-pythonic, way of doing things.
+Basically, if you're fiddling around a lot with `os.path` and other
+file-manipulation functions, you're missing out on this much nicer, arguably
+more pythonic, way of doing things.
 
 **Where?**
 
@@ -46,13 +47,10 @@ pythonic, way of doing things.
 Similar to `Unipath`, but for replacing `subprocess`. Call any program as if it
 were a function, and get return values in a sane manner.
 
-
-**Show me.**
-
+**How?**
 
 Using a bit of python magic, the module lets you import any program as if it
 were a function:
-
 
 ```pycon
 >>> from sh import ls
@@ -66,17 +64,16 @@ drwxr-xr-x@  2 root  wheel       68 25 Aug  2013 Network
 
 Argument passing can also be done with keyword-args:
 
-
 ```pycon
 >>> from sh import curl
 >>> curl("https://duckduckgo.com/", silent=True).split()[:2]
 [u'<!DOCTYPE', u'html>']
 ```
 
-
 From that you might surmise that the return of any shell command is a `unicode`
-object - but it's not! It's a wrapper around the result...
-
+object - but it's not! It's a `sh.RunningCommand` that wraps around the
+result to expose the `stdout` by default, but lets you get at other attributes
+easily too...
 
 ```pycon
 >>> from sh import curl
@@ -91,8 +88,8 @@ sh.RunningCommand
  '* Connection #0 to host www.duckduckgo.com left intact']
  ```
 
-I'm sure you can see how much easier this makes interacting with subprocesses.
-
+I'm sure you can see how much easier this makes subprocess interaction. Maybe
+you'll find yourself forgoing bash for Python soon :)
 
 **Where?**
 
@@ -105,13 +102,11 @@ I'm sure you can see how much easier this makes interacting with subprocesses.
 
 **What?**
 
-
 A mini-library with easy syntax for scheduling recurring jobs and running a job
-loop that executes them. For when cron isn't enough (environment issues etc.),
-but anything too heavyweight is overkill
+loop that executes them. For when cron isn't enough (environment issues,
+logging, etc.), but anything much bigger is overkill.
 
-
-**Show me.**
+**How?**
 
 From the README:
 
@@ -134,14 +129,17 @@ while True:
 ```
 
 It's inspired by a Ruby module, as you might be able to tell from the DSL
-syntax (and don't let anyone ever tell you again that Python can't do DSLs!).
-
+syntax (don't let anyone ever tell you again that Python can't do DSLs!). If
+you do use it to replace cron, use something like
+[supervisord](http://supervisord.org/) to keep your schedule program running in
+case of failure.
 
 **Where?**
 
 * `pip install schedule`
-* Readme says "(coming soon)" - but the [FAQ](https://github.com/dbader/schedule/blob/master/FAQ.rst#faq)
-  explains nearly everything
+* Readme says "(coming soon)" - but the
+  [FAQ](https://github.com/dbader/schedule/blob/master/FAQ.rst#faq) explains
+  nearly everything
 * [Source on Github dbader/schedule](https://github.com/dbader/schedule)
 
 
@@ -149,12 +147,10 @@ syntax (and don't let anyone ever tell you again that Python can't do DSLs!).
 
 **What?**
 
-
 "Time Travel Made Easy." Simplifies a lot of `datetime` interactions that
 become painful when you're doing a lot of them.
 
-
-**Show me.**
+**How?**
 
 ```python
 >>> from delorean import Delorean
@@ -174,8 +170,8 @@ datetime.date(2014, 7, 22)
 2014-07-17 00:10:00+00:00
 ```
 
-Delorean wraps a couple of useful date/time libraries - `pytz` and `dateutil`
-to provide this functionality.
+Delorean wraps a couple of useful date and time libraries - `pytz` and
+`dateutil` - to provide this functionality. And it has an awesome name.
 
 **Where?**
 
@@ -190,7 +186,7 @@ to provide this functionality.
 
 "Schema validation just got Pythonic."
 
-**Show me.**
+**How?**
 
 ```pycon
 >>> from schema import Schema, And, Use, Optional
@@ -218,12 +214,20 @@ or whatever. Also great for unittests, where validating all the values output
 by the code might be impossible, but you can at least check for their type and
 existence.
 
-
 **Where?**
 
 * `pip install schema`
 * [Documentation on Github Readme](https://github.com/halst/schema#schema-validation-just-got-pythonic)
 * [Source on Github halst/schema](https://github.com/halst/schema)
+
+
+## 6. Bonus!! django-unchained
+
+**What??**
+
+We've all heard of django for web app development; now there's the awesome
+**Django Unchained** library to take it to the next level. You'll have to
+`pip install django-unchained` to find out what it's all about.
 
 ---
 
