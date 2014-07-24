@@ -12,6 +12,13 @@ syntax and a few things that you always wanted to do, but never knew.
 
 ## 1. Unipath
 
+**EDIT:** I missed out on
+[pathlib](https://docs.python.org/3/library/pathlib.html), which joined the
+standard library in Python 3.4, and provides the same object-oriented niceness
+for paths as `Unipath`. You should use that - there's a
+[backport for Python 2.x](https://pypi.python.org/pypi/pathlib/) as well.
+Unipath is just a has-been contender now I guess.
+
 **What?**
 
 It's an “object-oriented alternative to os/os.path/shutil”.
