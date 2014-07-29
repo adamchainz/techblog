@@ -1,28 +1,29 @@
 ---
 layout: post
 title: "DevOps Exchange London: Continuous Delivery"
-<!-- date: 2014-07-12 21:38:16 +0100 -->
+date: 2014-07-29 06:51:06 +0100
 comments: true
 categories:
 ---
 
 Last Thursday (24th July 2014) I went to the DevOps Exchange London Meetup on
-[Continuous Delivery] [1]; here is my quick review of the talks and interesting
-take-aways.
+[Continuous Delivery] [1]; here is my quick review of the talks and what I
+took away.
 
 
 ## 1. Snakes & Ladders - Continuous Delivery Edition
 
 The first talk was given by **Nathan Fisher**, who used to work at
 [ThoughtWorks][2] and is now at [Maxymiser][3]. He had a lot of experience to
-share from helping organizations move over to a Continuous Delivery pipeline.
-As the title suggests, his talk used the ‘Snakes & Ladders’ boardgame as an
+share from consulting and helping organizations move over to a Continuous
+Delivery pipeline.
+As the title suggests, his talk used the ‘Snakes & Ladders’ board-game as an
 analogy for the transition to CD, where ‘snakes’ are the issues that slow you
-down, and ‘ladders’ are the easy wins on the way. He talked on a number of
-topics, giving good rules of thumb backed up by anecdotes from transitions he'd
-worked on before.
+down, and ‘ladders’ are the easy wins on the way.
+He talked on a number of topics, giving good rules of thumb backed up by
+anecdotes from transitions he'd worked on before.
 
-I took a few main points away. Firstly, his suggestion to focus on the people
+I took a few main points away. He suggested to focus on the people
 first, rather than getting dug in with the technology; people often have
 ‘infatuation’ with existing structures/code/processes/etc., so even when a CD
 pipeline would be a clear win, it's hard to get existing solutions thrown away.
@@ -30,17 +31,17 @@ He has also seen incredibly complex, multi-person software release processes
 and suggested that before making any moves, a consultant should sit down with
 each of the people involved at each stage whilst they complete a release.
 Another point he emphasised was that manual QA can still be very important
-for a CD pipeline, despite the emphasis on automated testing; whilst Facebook
-can afford to find out a handful of features broke on a deployment, a low
-traffic, high value website can't (think 10 customer company), and should have
-a strong manual QA process.
+for a CD pipeline, despite the general emphasis on automated testing;
+whilst, say, Facebook can easily afford to find out a handful of features broke
+on a deployment, a low traffic, high value website can't , and should have a
+strong manual testing & QA process.
 
 ## 2. How to Choose Tools for DevOps and Continuous Delivery
 
-The next talker was **Mathew Skelton**, whos is clearly very experienced and
+The next talker was **Matthew Skelton**, who is clearly very experienced and
 co-founded [Skelton Thatcher Consulting][4].
-He told us how they had consulted with many
-large companies in nearly every sector (tourism, gambling, finance, ...),
+He told us how they had consulted with many large companies in nearly every
+sector (tourism, gambling, finance, ...),
 who have often been around since the dot-com-boom and therefore have 15 year
 old software to rework.
 He recommended the [Continuous Delivery Book][5] and explained how useful it
@@ -59,31 +60,34 @@ Under **1**, he explained how important it is to get everyone on the same page,
 and using the same tools, even if they aren't all using them at the same level.
 He used this to fluidly transition to **2**, under which he showed how good
 Git can be for this - by using a simple Web UI such as Github, everyone can
-start to understand how Git works without any complex commandline invocations.
+start to understand how Git works without any complex command-line invocations.
 For example, a QA tester can look over the repository log and understand what
-changes are being maed without needing to even understand the code.
+changes are being made without needing to even understand the code.
 
-This transitioned into point **3**, where Mathew warned against using
+This transitioned into point **3**, where Matthew warned against using
 ‘Singleton Tools’, by which be meant those you can only use in a single
 environment (production).
 For example, *some* monitoring tools are expensively priced which stops them
 being viable for every environment, including developer machines.
 His experience indicated that such tools prevent vital inter-team collaboration
-(back to point **1**), and that free open source tools such as
-the [ELK stack][6] can be deployed everywhere and help create those links.
+(back to point **1**),
+whilst free open source tools such as the [ELK stack][6] are easy enough to
+deploy everywhere and foster those links.
 For example, if a developer works day-to-day with the logs in Kibana on his
-machine, he'll feel comfortable helping a DevOps debug a production issue with
-the same tool when it arises. I found this a very useful take-away, and have
-made a note to try it out at YPlan.
+local machine,
+he'll feel comfortable helping a DevOps debug a production issue with the same
+tool when it arises.
+I found this very useful advice, and plan to try it myself soon.
 
-His final point on [Conway's Law][7] was unfortunately skipped due to lack of
-time, but he recommended that we look it up. For completeness, here it is:
+His final point was to be on [Conway's Law][7] was unfortunately skipped due to
+lack of time, but he recommended that we look it up.
+For completeness, here it is:
 
 > organizations which design systems ... are constrained to produce designs
 > which are copies of the communication structures of these organizations
 
-I'm sure Mathew would have enlightened us with some extra tales of when he'd
-seen it appear in the real world.
+I'm sure Matthew would have enlightened us with some extra tales of when he'd
+seen it rear its head in the real world.
 
 ## 3. The Need for Speed
 
@@ -127,7 +131,8 @@ DevOps exchange delivered here too. Much pizza and beer was provided and there
 were plenty of interesting people to talk to.
 
 I'd like to say thanks to the organizers, speakers, and Moonfruit for hosting.
-You can join the meetup for next time on [meetup.com][13].
+If you're interested, I'd recommend you join the meetup for next time on
+[meetup.com][13] - I'll see you there!
 
 
 
