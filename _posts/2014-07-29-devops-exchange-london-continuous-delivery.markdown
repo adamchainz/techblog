@@ -10,6 +10,9 @@ Last Thursday (24th July 2014) I went to the DevOps Exchange London Meetup on
 [Continuous Delivery] [1]; here is my quick review of the talks and what I
 took away.
 
+**Edit:** the [official blog post] [14] is online too now - if any of the below
+talks sound enticing, you can watch them or read the slides there.
+
 
 ## 1. Snakes & Ladders - Continuous Delivery Edition
 
