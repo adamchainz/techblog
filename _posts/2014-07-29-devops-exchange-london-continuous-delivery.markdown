@@ -109,7 +109,7 @@ survival.
 He also quoted Jack Welch:
 
 > [for a business...] If the rate of change on the outside exceeds the rate of
-> change on the outside, the end is near.
+> change on the inside, the end is near.
 
 Steven also backed up the claim with some statistics on number of deployments
 for some large internet companies:
