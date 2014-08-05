@@ -25,8 +25,8 @@ Thankfully, it's not hard to fix that, using a couple of Ansible features
   command: >
     Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages(pkgs='{{ item }}', repos=c('http://ftp.heanet.ie/mirrors/cran.r-project.org/')); print('Added'); } else { print('Already installed'); }"
   register: r_result
-  failed_when: r_result.rc != 0 or r_result.stdout.find("had non-zero exit status") != -1
-  changed_when: r_result.stdout.find("Added") != -1
+  failed_when: "r_result.rc != 0 or 'had non-zero exit status' in r_result.stderr"
+  changed_when: "'Added' in r_result.stdout"
   with_items:
     - getopt
 {% endraw %}
@@ -62,7 +62,7 @@ Whilst we're at it, here's code for removing R packages:
     /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { print('Not installed'); } else { remove.packages(pkgs='{{ item }}'); print('Removed'); }"
   register: r_result
   failed_when: r_result.rc != 0
-  changed_when: r_result.stdout.find("Removed") != -1
+  changed_when: '"Removed" in r_result.stdout'
   with_items:
     - getopt
 {% endraw %}
