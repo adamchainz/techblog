@@ -25,7 +25,7 @@ Thankfully, it's not hard to fix that, using a couple of Ansible features
   command: >
     Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages(pkgs='{{ item }}', repos=c('http://ftp.heanet.ie/mirrors/cran.r-project.org/')); print('Added'); } else { print('Already installed'); }"
   register: r_result
-  failed_when: r_result.rc != 0
+  failed_when: r_result.rc != 0 or r_result.stdout.find("had non-zero exit status") != -1
   changed_when: r_result.stdout.find("Added") != -1
   with_items:
     - getopt
