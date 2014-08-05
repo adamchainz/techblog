@@ -47,6 +47,26 @@ list:
 I found this a good reminder that Ansible uses Jinja2 everywhere you could want
 it to, and that Jinja2 can do a lot more than simple variable substitution.
 
+**EDIT** This has been deemed bad practice and now fails on the latest Ansible
+with this error:
+
+{% highlight text %}
+ ________________________________
+< TASK: machine | pip - packages >
+ --------------------------------
+        \  ^___^
+         \ (ooo)\_______
+           (___)\       )\/\
+                ||----w |
+                ||     ||
+
+
+fatal: [default] => A variable inserted a new parameter into the module args. Be sure to quote variables if they contain equal signs (for example: "{{var}}").
+{% endhighlight %}
+
+Guess it's just too clever!
+
+
 
 ## 2. Increase forks in .ansible.cfg
 
