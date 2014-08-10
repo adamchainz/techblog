@@ -58,7 +58,7 @@ html {
   padding: 2rem 1rem;
   /*color: rgba(255,255,255,.5);*/
   background-color: #202020;
-  background: url(/tech/assets/triangular_@2X.png) 399px 399px repeat;
+  background: url(/tech/assets/triangular_@2X.png) 60px 60px repeat;
 }
 @media (min-width: 48em) {
   .sidebar {
