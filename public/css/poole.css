@@ -234,6 +234,12 @@ img {
   border-radius: 5px;
 }
 
+img.screenshot {
+  width: 75%;
+  border: 1px solid #e5e5e5;
+  margin: 0 auto;
+}
+
 /* Tables */
 table {
   margin-bottom: 1rem;

@@ -6,12 +6,12 @@ comments: true
 categories:
 ---
 
-![Clock clock clock clock clock clock clock clock]
+![Clock clock clock clock clock clock clock clock clock clock clock clock clock]
 ({{ site.baseurl }}/assets/2014-08-06-portrait-of-time.jpg)
 
 
 I was recently tasked with keeping the various repeating jobs running for our
-data scientists at YPlan. They have a number of relatively small nightly tasks
+data scientists at YPlan. They have a number of nightly or weekly jobs
 to be run, such as creating summary tables of the day's various activity logs,
 pulling in data from third party services, and so on.
 
@@ -19,53 +19,50 @@ pulling in data from third party services, and so on.
 The jobs were already running on a couple of brittle hand-configured EC2
 instances via cron, and it was my job to bring them all together on one
 instance configured using Ansible. During the re-build, I came to the
-conclusion that cron, that unix staple, just wasn't cutting it for me, and I'd
-have to find a replacement.
+conclusion that cron, that unix staple, just wasn't cutting it, and I'd have to
+find a replacement.
 
 
-Cron? It's a staple of the unix ecosystem, relied upon for decades to keep
-processes running to a schedule. What's wrong with it?
+But, not use cron? Why not? It's a unix staple, relied upon by sysadmins for
+decades to keep such jobs running to schedule. What's wrong with it?
 
 
-It's actually horrible to use. It's far *too* simple, its syntax for _when_
-jobs run is esoteric to say the least (quick - what does `*/5 * 2 * *` mean
-again?), and it's famously hard to get the environment to be the way you want
-it - your script running perfectly fine in bash will probably take several
-attempts to get working perfectly under the cron. And on top of that, every job
-definition will need log redirection or a wrapper script to get working.
+Well, I'll be honest... it's horrible to use. The syntax for _when_ jobs run is
+esoteric (quick - what does `*/5 * 2 * *` mean again?), and it's famously hard
+to match environment between your shell and it. Logging is normally a matter of
+redirecting into files with `2>&1 >>myfile.log`, and often you end up prefacing
+every job with a `cd` into its directory. I know when I've used cron in the
+past I've ended up writing a wrapper script to do the working
+directory/environment/logging stuff and then put the wrapper script around each
+job in the crontab... by which time, I could've investigated and used a better
+tool.
 
 
-What I wanted was something straightforward and easy to integrate, that
-could capture all the log output to a file (to be improved later with e.g.
-[**logstash**] [7]). And it had to be easy to explain to my data scientists,
-whose two common languages are python (yay!) and R (ok!).
+> **Exhibit A:** the internet is abound in crontab testing webtools to turn to
+> when you realize you've already spent an hour trying to work out why that job
+> didn't run when you said it should. ([CRON tester] [9])
+> <img src="{{ site.baseurl }}/assets/2014-08-06-cron-tester.png" class='screenshot' alt='CRON tester'>
 
 
-I searched for existing tools and a few caught my eye:
+A job scheduler should be easily integrated with the rest of your code, and
+simple enough to read when the jobs run. I'd been blessed prior to this that
+the main job scheduler I'd worked with was the one built in to [celery] [10],
+although I've also recently wrestled with `launchctl`, the convoluted XML-based
+Mac OS X scheduler, which is worse than cron.
 
 
-* [**Crabd**] [1] - a wrapper around cron jobs that provides a consistent
-  environment and log capture, plus a dashboard that reports successful runs
-  and failures. Unfortunately the installation instructions were too hard to
-  follow (copying files from elsewhere into the repo), especially in Ansible
-  code, so I never got around to booting it.
-
-* [**Azkaban**] [2] - created at LinkedIn and designed for Hadoop jobs, this
-  looked good as it offered a dashboard and execution history. Unfortunately it
-  was even harder to install, and then configure - the only documented way is
-  to upload a zipfile of job descriptions via the web interface, which makes
-  them too hard to track in source control.
-
-* Various other things that turned up when googling 'cron monitor' etc.
+For my data scientists though, celery would have been overkill and too much to
+explain, so I set out looking for a simple job scheduler that was still better
+than cron. Because most of the data science code is already in Python, finding
+a library that would do it was my first idea. Through my googling, I came
+across the simple [**schedule**] [3] library (as I mentioned in my [last python
+post] [4]) and realized that it would do everything I wanted, and no more. It's
+based upon a similarly simple **ruby library** [Clockwork] [8], which was
+dreamt up by [Adam Wiggins] [11], another cron-hater.
 
 
-In the end though, I stumbled on the simple [**schedule**] [3] library (as
-covered in my [last python post] [4]) and realized that it
-would do everything I wanted, and no more. It's based upon a similarly simple
-**ruby library** [Clockwork] [8].
-
-I downloaded the library and typed up a quick `jobs.py` (here I just have an
-example job, but you get the idea):
+I installed the library and within minutes had a `jobs.py` script ready to
+run (here gutted to just an example job, but you get the idea):
 
 
 ```python
@@ -102,7 +99,8 @@ if __name__ == '__main__':
 The simple DSL syntax that **schedule** offers was nice and clear to me, and
 because it was running in a python process I had all the flexibility of being
 tied into the existing code in the repository, such as the `logging`
-configuration.
+configuration. The `log_job` helper I added was mostly there because, to begin
+with, most of the jobs had gave no output.
 
 
 With that all sorted, I had to think about keeping the jobs running, and
@@ -112,7 +110,9 @@ long time - [**Supervisord**] [5].
 
 
 A quick supervisor job conf (templated by Ansible) would do all I wanted - keep
-`jobs.py` running no matter what, and capture all its output to a log file:
+`jobs.py` running no matter what, and capture all its output to a log file (to
+be extended to use [**logstash**] [7] soon):
+
 
 {% highlight ini %}
 {% raw %}
@@ -134,25 +134,34 @@ schedule, e.g.:
 
 
 ```python
-schedule.every().day.at("07:00").do(log_job, reports.dailystats.send)
+schedule.every().day.at("07:00").do(log_job, database.rebuild_summary_tables.main)
 ```
 
 There are some jobs implemented in **R** though - but use of the **sh** library
-it is easy to run them as python functions:
+it is easy to run them as easily as python functions:
 
 
 ```python
 import sys
 from sh import Rscript
+from configuration import sh_file_logger
 
 
-def do_the_thing():
-    Rscript('the_thing.R', _out=sys.stdout)
+def process_stats():
+    Rscript('process_stats.R', _out=sh_file_logger)
 ```
 
+(The `sh_file_logger` is a special file-like-logger-wrapper, based on
+[this recipe] [12], that replaces `stdout` so the R script's output is directed
+through the python logging module.)
 
-I need to get
 
+In conclusion, the data scientists are happy and so am I. Jobs are running and
+logged properly, and the syntax is straightforward so it's simple for any team
+member to add a new one.
+
+
+Please, don't use cron. Find a sensible alternative.
 
 
 [1]: https://github.com/grahambell/crab
@@ -163,3 +172,7 @@ I need to get
 [6]: http://getsentry.com/
 [7]: http://logstash.net/
 [8]: https://github.com/tomykaira/clockwork
+[9]: http://cron.schlitt.info/
+[10]: http://www.celeryproject.org/
+[11]: http://adam.herokuapp.com/past/2010/6/30/replace_cron_with_clockwork/
+[12]: http://plumberjack.blogspot.co.uk/2009/09/how-to-treat-logger-like-output-stream.html
