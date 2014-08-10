@@ -128,9 +128,9 @@ redirect_stderr = True
 {% endhighlight %}
 
 
-The jobs themselves are mostly in python as scripts that can be run from the
-command line, in which case I simply import the library and run its `main` on
-schedule, e.g.:
+The jobs themselves are mostly python scripts that can be run from the
+command line, in which case to run them as jobs I simply import the file and
+run its `main` on schedule, e.g.:
 
 
 ```python
