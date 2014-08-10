@@ -56,8 +56,9 @@ html {
 .sidebar {
   text-align: center;
   padding: 2rem 1rem;
-  color: rgba(255,255,255,.5);
+  /*color: rgba(255,255,255,.5);*/
   background-color: #202020;
+  background: url(/tech/assets/triangular_@2X.png) 399px 399px repeat;
 }
 @media (min-width: 48em) {
   .sidebar {
@@ -72,14 +73,16 @@ html {
 
 /* Sidebar links */
 .sidebar a {
-  color: #fff;
+  color: #2D6F9E;  /* darkened default link blue */
+  font-weight: bold;
 }
 
 /* About section */
-.sidebar-about h1 {
+.sidebar-about h1 a {
   color: #fff;
   margin-top: 0;
   font-size: 3.25rem;
+  text-shadow: rgba(0,0,0,0.2) 3px 3px 0;
 }
 
 /* Sidebar nav */
