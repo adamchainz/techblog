@@ -19,7 +19,7 @@ author:
   url:            https://github.com/adamchainz
   email:          me@adamj.eu
 
-paginate:         5
+paginate:         10
 
 # Custom vars
 version:          2.1.0
