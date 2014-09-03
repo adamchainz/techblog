@@ -1,19 +1,19 @@
 ---
 layout: post
 title: "Factory Boy Fun"
-date: 2014-09-02 12:40:00 +0100
+date: 2014-09-03 21:20:00 +0100
 comments: true
 categories:
 ---
 
 ![Factory.]
-({{ site.baseurl }}/assets/2014-09-02-factory.jpg)
+({{ site.baseurl }}/assets/2014-09-03-factory.jpg)
 
 I've recently been working on improving the test suite at YPlan. The biggest
 change is moving towards dynamic fixtures for our Django models using
 [“Factory Boy”][1]. This library is essentially a tool that lets you define
 simple helper functions to generate random, sensible model instances quickly;
-by using them in tests you can avoid the static json fixture files that Django
+by using them in tests you can avoid the static JSON fixture files that Django
 recommends you use in tests by default. Factories are also general purpose -
 they just generate data and use it to create a model - and so they can be
 re-used to fill your development database rather than dumping from production.
@@ -37,7 +37,7 @@ class MyTests(TestCase):
 ```
 
 We have test data in two places with different maintenance strategies - ouch.
-Firstly, the 'basic.json' file contains json objects with data to be passed to
+Firstly, the 'basic.json' file contains JSON objects with data to be passed to
 the model constructor; and secondly, the call to `User.objects.create` which
 contains data in a different format.
 
@@ -103,38 +103,38 @@ class User(DjangoModelFactory):
 ```
 
 Calling this as it stands (`factories.User()`) will perform the same task as
-the `User.objects.create` call previously. However, it has some neat extras
-which make it awesome.
+the previous `User.objects.create` call. However, it brings with it some
+awesome bonuses.
 
 Firstly, the `lazy_attribute` calls mean the username and email fields are
-filled from the first and last names. A more specific call, e.g.
-`factories.User(first_name='Johnny')`, will mean the username and email are
-given sensible values, avoiding typing and noise in our test code.
+filled from the first and last names. A call specifying one field, e.g.
+`factories.User(first_name='Johnny')`, will have its username and email set to
+sensible values, reducing typing and noise in our test code.
 
 Secondly, the factory's `Meta` has `django_get_or_create` set, which
 means the factory will call the Django built-in `User.objects.get_or_create` to
-make the model, meaning only one user will be made per username. This gets more
-useful when we call several different factories for models with foreignkeys to
+make the model, yielding only one user per username. This gets more useful when
+we call several different factories for models with foreign keys to
 User and we want them to share.
 
 Lastly, the `date_joined` and `last_login` fields are automatically filled in
-with sensible random values - what we might call fuzzy testing. Since tests
-shouldn't depend on specific values they don't declare, this is a good
-extension of the factory - but we can make it fuzzier still...
+with sensible random values - what we call fuzzy testing. Since tests shouldn't
+depend on specific values they don't declare, this is a good extension of the
+factory - BUT we can make it fuzzier still...
 
 ## Adding fuzz
 
-<img src="{{ site.baseurl }}/assets/2014-09-02-fuzzy-camel.jpg"
+<img src="{{ site.baseurl }}/assets/2014-09-03-fuzzy-camel.jpg"
      style="width: 70%; margin: 0 auto" alt="Fuzzy Camel">
 
-Now, having a factory that always runs `get_or_create` for the same values
-*unless* you pass in a different `first_name` *could* be useful, but it's
-passing up on one of the more useful features of factory boy - adding fuzziness
-to the test data. This is a great way of adding value to your tests since by
-automatically always testing with a range of values you increase the width of
-your tests and the range of errors you may catch.
+Having a factory which by default always returns the 'adam' user *could* be
+useful, but it's more likely that you want the factory to give a different user
+each time. Thankfully, fuzziness is one of factory boy's strengths. This is
+also a great way of adding value to your tests since you'll always
+automatically be testing with a range of values, so the range of errors you may
+catch has increased.
 
-Let's update the factory to use a range of values:
+Let's update the factory to use random names:
 
 ```python
 import faker
@@ -149,18 +149,17 @@ class User(DjangoModelFactory):
     # ... as above
 ```
 
-Aha! What's [**faker**] [2]? It's a brilliant little utility library for
-generating fake data with a ton of helper functions for things you'd otherwise
-end up writing yourself. And again thanks to the dependencies we set up
-with `lazy_attribute` above, we'll get a complete `User` with the username and
-email filled in appropriately. For example, we might get:
+Aha! What's this [**faker**] [2]? It's a brilliant little utility library for
+generating fake data via a ton of helper functions. And again thanks to the
+dependencies we set up with `lazy_attribute` above in other fields, we'll get a
+complete `User` with everything filled in appropriately.
 
 ### Controlling the Randomness
 
 A quick diversion on your test structure - using fuzziness is great, but if you
-get a failure that only occurs on *specific* values in your model, you won't be
-able to recreate it without adding some control for the random number
-generator to your tests.
+get a failure that only occurs with *specific* fuzzed values, you won't be able
+to recreate it without control over the random number generator used in your
+tests.
 
 If you're using **nose**, you can add the [**nose-randomize**][3] plugin. It
 will output the seed that is used to initialize the random number generator on
@@ -171,7 +170,7 @@ tests in a random order, to prevent them from depending on each other!
 ## Even Better Lazy Attributes
 
 Let's imagine extending the above `User` factory to allow us to create staff
-members as well. The factory boy docs recommend subclassing for this, where
+members as well. The factory boy docs recommend sub-classing for this, where
 we'd create a `StaffUser` factory that inherits from the `User` factory and
 tweaks it appropriately. This can be useful, but since only a few attributes
 need changing for staff, we can avoid creating (and having to think about)
@@ -189,32 +188,31 @@ class User(DjangoModelFactory):
         return o.username + "@" + domain
 ```
 
-This is a neat little trick to avoid breaking Occam's Razor: **“Do not multiply
-entities beyond necessity.”**
-
-Also, we can quickly note just how awesome factory boy's lazy attributes are:
-the method we're decorating is not called with `self` as a simple object, or
-the model, but instead a `LazyStub` (see [source] [4]). Any level of dependence
-upon other properties is possible since they will be resolved, 'magically', as
-required - as long as you don't create circular dependencies.
+Also, let's quickly note just how awesome factory boy's lazy attributes are.
+Functions decorated with `lazy_attribute` are not called with `self` as the
+model, but instead an instance of `LazyStub`, which calculates *all* its
+attributes on access. Therefore, we can add any dependencies we wish, apart
+from circular ones. If, e.g. `email` is called first, it will first go and
+calculate `is_staff` and `username` (which depends on `first_name`), before
+completing. If you want to understand more, the [source] [4] is quite
+instructive.
 
 ## Building versus Creating
 
 At its core, factory boy is a tool for generating and passing a dict of
 keyword-args to a function - and it also lets you choose which function.
-Subclasses of DjangoModelFactory will by default call `Model.objects.create`
+Subclasses of `DjangoModelFactory` will by default call `Model.objects.create`
 and give you back the resultant model. In Django world, `objects.create` calls
-the model's `.save()` to persist it to the database.
+the model's `save()` to persist it to the database.
 
-But actually, the factory has two methods - `create` and `build`. `create` is
-the default (shortcutted by calling the factory directly) that calls
-`objects.create`, whilst `build` just instantiates the model and doesn't call
-`save()`.
+But actually, the factory comes with two methods - `create` and `build`.
+`create` is the default (and short-cutted by calling the factory directly) that
+calls `objects.create`, whilst `build` just instantiates the model and doesn't
+call `save()`.
 
-In some cases, just `build`ing the model will suffice for a test, saving the
-effort of database access. In fact, it might be more useful for us to make
+In some cases, just `build`ing the model will suffice for a test, and will save
+us the overhead of DB access. In fact, it might be more useful for us to make
 factories default to building - luckily there's a `Meta` attribute to do that:
-
 
 ```python
 from factory import BUILD_STRATEGY
@@ -229,7 +227,7 @@ Now calling the factory with `factories.User()` will give us a user without an
 `id`, i.e. not saved to the database, and you need to call
 `factories.User.create()` to get an instance that has been saved.
 
-Persoanlly I prefer this as a default as it mirrors Django more closely and
+Personally I prefer this as a default as it mirrors Django more closely and
 you'll hopefully write faster tests since DB persistence is something you have
 to request.
 
@@ -237,7 +235,7 @@ to request.
 
 Djanger djanger! Watch out for Django's type coercion behaviour, which only
 occurs on *load*. For example, if we have a DecimalField on our model called
-`price` that the factory sets to an int, it won't be coerced to a `Decimal`
+`price` that the factory sets to an `int`, it won't be coerced to a `Decimal`
 at any point:
 
 ```python
@@ -255,9 +253,9 @@ class Product(DjangoModelFactory):
     price = lazy_attribute(lambda o: randint(5, 100))
 ```
 
-Call `factories.Product()` will return a valid `models.Product` with a random
-price, but that price will be an `int`. This is a weakness of Django more than
-anything else, so we'll have to be a bit more careful here:
+Calling `factories.Product()` returns a valid `models.Product` with a random
+price, but that price will only be an `int`. This is a weakness of Django more
+than anything else, so we'll have to be a bit more careful with our types here:
 
 ```python
 from decimal import Decimal
@@ -269,12 +267,12 @@ class Product(DjangoModelFactory):
 
 ## One-to-many dependencies
 
-<img src="{{ site.baseurl }}/assets/2014-09-02-yucca-tree.jpg"
+<img src="{{ site.baseurl }}/assets/2014-09-03-yucca-tree.jpg"
      style="width: 70%; margin: 0 auto" alt="Tree of dependencies">
 
 The **factory boy** docs are a bit thin on the ground for handling one-to-many
 dependencies, although they go into depth on one-to-one and many-to-many
-relationships. Thankfully the multipurpose `post_generation` hook can be used
+relationships. Thankfully the multi-purpose `post_generation` hook can be used
 to solve the creation of many dependent objects, with a little extra code.
 
 Here's an example:
@@ -340,7 +338,6 @@ class Product(DjangoModelFactory):
 
 It's pretty straightforward, although it does introduce an otherwise useless
 “empty” factory.
-
 
 ## Conclusion
 
