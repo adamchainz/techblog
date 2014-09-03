@@ -10,14 +10,68 @@ categories:
 ({{ site.baseurl }}/assets/2014-09-02-factory.jpg)
 
 I've recently been working on improving the test suite at YPlan. The biggest
-change I'm making is to move towards dynamic fixtures for our Django models
-using [“Factory Boy”][1]. Essentially, factory boy gives you easy helper
-functions to generate model instances quickly, rather than using static fixture
-json files as Django recommends by default. It's a lot easier and means you
-don't have to maintain these models - as well as giving you the ability to
-generate test data locally via e.g. a custom management command.
+change is moving towards dynamic fixtures for our Django models using
+[“Factory Boy”][1]. This library is essentially a tool that lets you define
+simple helper functions to generate random, sensible model instances quickly;
+by using them in tests you can avoid the static json fixture files that Django
+recommends you use in tests by default. Factories are also general purpose -
+they just generate data and use it to create a model - and so they can be
+re-used to fill your development database rather than dumping from production.
+
+## The problem
+
+A typical test case might look like this:
+
+```python
+class MyTests(TestCase):
+    fixtures = ['basic.json']
+    def setUp(self):
+        self.user = User.objects.create(
+            username='adam',
+            first_name='Adam',
+            last_name='Johnson',
+            email='adam@example.com'
+        )
+
+    # and some tests ...
+```
+
+We have test data in two places with different maintenance strategies. Firstly,
+the 'basic.json' file contains json objects with data to be passed to the model
+constructor; and secondly, the call to `User.objects.create` which contains
+data in a different format. Also, it's really hard to tell what data the test
+*depends* on being there, and what data has been filled in just because the
+model needs it - e.g. these tests are unlikely to need to send an email to me,
+but I had to fill it in anyway. This is just noise.
+
+If you've created more than a handful of tests you've probably already
+extracted some of the basics into your own helper functions, e.g. a
+`create_user` method on your `TestCase`:
+
+```python
+class MyTests(TestCase):
+    fixtures = ['basic.json']
+    def setUp(self):
+        self.user = self.create_user('Adam', 'Johnson')
+
+    # and some tests ...
+```
+
+But these functions are a lot of work to create and maintain, and often you
+don't have time to code in the flexibility that you'd want for all the model
+parameters. Additionally, we want to get rid of the static json files, which
+quickly become hard to maintain with schema changes.
 
 ## A basic factory
+
+**Factory boy** rescues us here with its factories. You define them as classes,
+but they act more like functions since attempting to instantiate a factory
+returns an instance of the model instead (through a little Metaclass magic).
+
+I've used the convention of creating a `factories` module alongside `models`,
+and importing that to call `factories.User()` to generate a user. This avoids
+some of the smurfiness that the factory boy docs produce with `UserFactory()`
+all over the place.
 
 Here's a basic factory that generates `auth.User` instances:
 
@@ -45,18 +99,26 @@ class User(DjangoModelFactory):
     last_login = lazy_attribute(lambda o: o.date_joined + dt.timedelta(days=4))
 ```
 
-First thing to note is that I don't bother with the convention in the factory
-boy docs and just call the factories after the model they create. You can then
-then just import the `factories` module and call it like e.g.
-`factories.User()`.
+Calling this as it stands (`factories.User()`) will perform the same task as
+the `User.objects.create` call previously. However, it has some neat features
+which are what makes it awesome.
 
-The second thing is to make things dependent even if they aren't needed by the
-factory definition as it stands. For example, the above factory will always
-return the same user, with username adam, because the `first_name` attribute is
-fixed. However, we can call it setting the `first_name` and get a different user
-with e.g. `factories.User(first_name='Johnny')` - since `username` and `email`
-are dependent, they'll be set accordingly, and via the `django_get_or_create`
-in the factory's `Meta`, we'll get a different model.
+Notably, the username and email fields are filled in automatically by the
+first and last names. This means a second, specific call to
+`factories.User(first_name='Johnny')` will set the username and email
+appropriately, avoiding noise in our test code about these fields, since they
+have to be unique.
+
+Additionally via the factory's `Meta` we have set `django_get_or_create`, which
+means the factory will call `User.objects.get_or_create` to make the model,
+avoiding duplicate username errors. This gets more useful when we call several
+factories that all have foreignkeys to User, and we want to avoid creating too
+many users.
+
+Lastly, the `date_joined` and `last_login` fields are automatically filled in
+with sensible random values - which we call fuzzy testing. Since tests
+shouldn't depend on specific values they don't declare, this is a good
+extension of the factory - but we can make it fuzzier still...
 
 ## Adding fuzz
 
