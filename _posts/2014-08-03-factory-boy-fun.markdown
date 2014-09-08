@@ -297,7 +297,7 @@ class ProductGroup(DjangoModelFactory):
 
         if not create:
             # Fiddle with django internals so self.product_set.all() works with build()
-            self._prefetched_objects_cache = {'deal': deals}
+            self._prefetched_objects_cache = {'product': products}
 
 
 class Product(DjangoModelFactory):
