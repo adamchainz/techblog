@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 import json
+import re
 import sys
 
 
@@ -15,11 +16,11 @@ def main():
             print ''.join(cell['source'])
         elif cell['cell_type'] == 'code':
             # Can't use ``` or any shortcuts as markdown fails for some code
-            print "{% highlight python %}"
+            print "{% highlight ipy %}"
 
             print "In [{}]: {}".format(
                 cell['prompt_number'],
-                '\n'.join(cell['input'])
+                ''.join(cell['input'])
             )
 
             try:
@@ -30,18 +31,27 @@ def main():
 
             for output in cell['outputs']:
                 if output['output_type'] in ('stream', 'pyout'):
-                    print "Out [{}]: {}".format(
+                    print "Out[{}]: {}".format(
                         cell['prompt_number'],
                         ''.join(output['text'])
                     )
                 elif output['output_type'] == 'pyerr':
-                    print output['traceback']
+                    print '\n'.join(strip_colors(o)
+                                    for o in output['traceback'])
                 else:
                     print output
                     import IPython; IPython.embed()
 
             print "{% endhighlight %}"
         print ""
+
+
+ansi_escape = re.compile(r'\x1b[^m]*m')
+
+
+def strip_colors(string):
+    return ansi_escape.sub('', string)
+
 
 if __name__ == '__main__':
     main()
