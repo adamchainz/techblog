@@ -14,6 +14,8 @@ description:      'Filled with little coding notes and fixes. Also check out my 
 url:              http://adamj.eu/tech/
 baseurl:          /tech
 
+exclude:          ['*.ipynb', '*.py']
+
 author:
   name:           'Adam Johnson'
   url:            https://github.com/adamchainz
