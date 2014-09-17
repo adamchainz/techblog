@@ -6,17 +6,21 @@ comments: true
 categories:
 ---
 
-Welcome Python beginner. Let's learn about a simple concept - `None`. What is `None`? It's the python equivalent of nothing, not even zero (that is a number, which is something!). You may also know this idea as `null`.
+![Space. The closest thing to nothing.]({{ site.baseurl }}/assets/2014-09-17-big-dipper.jpg)
 
-I'm working in IPython, if you want to follow along. It's a better (like 100x better) python interpreter. If you already have python installed, you can just `pip install ipython` to get it, and type `ipython` to run it.
+**Disclaimer:** even though this post covers nothing, it does so in a fairly technical manner, so it's probably not appropriate for complete newbies. You'll need a little programming experience to understand it.
 
-Let's start by getting a `None`:
+Okay, with the disclaiming out of the way, let's get on to learning about nothing - or rather, python's name for it, `None`. Remember, nothing is nothing, not even zero (that's a number, which is something!). You may also know this idea as `null`.
+
+I'm writing this post in IPython. If you want to follow along at home, get your IPython console started by typing `ipython` at the command prompt. Didn't work? [Install it](http://ipython.org/install.html). Bam.
+
+Now, let's start by getting a `None`:
 
 {% highlight ipy %}
 In [1]: None
 {% endhighlight %}
 
-Woah, why isn't there any output? Let's try `print`ing it to the screen:
+Okay, great, but I'd like some feedback. Let's try `print`ing it to the screen:
 
 {% highlight ipy %}
 In [2]: print None
@@ -24,14 +28,14 @@ Out[2]: None
 
 {% endhighlight %}
 
-Okay, that's better. `print` gives you human output to the screen of what's happening. IPython doesn't show any output if a statement is `None`, which is wise, because it means nothing. But printing it lets us know that what we tried to print was `None`, rather than something. In fact, what `print` does is just output the `str`ing representation of what you give it:
+Okay, that's better. `print` gives you human output to the screen of what's happening. IPython doesn't show any output if a statement ends up as `None`, which is wise because it means nothing. But `print` tells us that we gave it `None`, rather than something - in fact, what `print` does is just output the `str`ing representation of what you give it:
 
 {% highlight ipy %}
 In [3]: str(None)
 Out[3]: 'None'
 {% endhighlight %}
 
-Aha, that's definitely a `str`ing since it has 'quote marks' around it. If we print the `str`ing, they won't display though:
+Aha, that's definitely IPython telling us we have a `str`ing, since it has 'quote marks' around it. However, if we print the `str`ing there won't be any quote marks:
 
 {% highlight ipy %}
 In [4]: print str(None)
@@ -41,16 +45,18 @@ Out[4]: None
 
 Brilliant.
 
-This `None` thing is interesting. Let's ask IPython more about it:
+Anyway, that's something, and we're more worried about `None`. Let's ask IPython more about it:
 
 {% highlight ipy %}
 In [5]: None?
 {% endhighlight %}
 
-    Type:        NoneType
-    String form: None
-    Namespace:   Python builtin
-    Docstring:   <no docstring>
+{% highlight ipy %}
+Type:        NoneType
+String form: None
+Namespace:   Python builtin
+Docstring:   <no docstring>
+{% endhighlight %}
 
 Aha, so its type is **"NoneType"**. Sounds like things in Python have types. That **String Form** there - we've already encountered that. **Namespace** is Python builtin - sensible, since I told you it was part of python and we haven't done anything to include any other spaces of names. But it has no docstring, which isn't a prescription, but something that documents what you're looking at.
 
@@ -118,7 +124,14 @@ Out[13]: True
 
 Yes indeed they are. So there is only ever one `None`, and we can't make any more of it - that's useful to know (write it down in your copy book now).
 
-I wonder if `None` can be checked against:
+Now let's have a break with a quote on nothing:
+
+![Marcus Aurelius]({{ site.baseurl }}/assets/2014-09-17-marcus-aurelius.png)
+
+> Nothing proceeds from nothingness, as also nothing passes away into non-existence.
+> Marcus Aurelius, Meditations, IV, 4
+
+What a legend. Let's continue; I wonder if `None` can be checked against:
 
 {% highlight ipy %}
 In [14]: if None:
