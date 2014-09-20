@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "A N00b's Guide to Python Part None"
-date: 2014-09-16 22:05:00 +0100
+title: "Python Concepts: Part None"
+date: 2014-09-22 17:30:00 +0100
 comments: true
 categories:
 ---
@@ -161,22 +161,21 @@ Let's have a break with a quote on nothing:
 ![Marcus Aurelius]({{ site.baseurl }}/assets/2014-09-17-marcus-aurelius.png)
 
 > Nothing proceeds from nothingness, as also nothing passes away into non-existence.
-> Marcus Aurelius, Meditations, IV, 4
+> 
+> -- Marcus Aurelius, Meditations, IV, 4
 
 ---
 
 Let's continue; I wonder if `None` can be checked against:
 
 {% highlight ipy %}
-In [16]: if None:
-    print "Yes, none."
+In [16]: if None: print "Yes, none."
 {% endhighlight %}
 
 Oh, nothing happened. Let's see what happens if we go the other way:
 
 {% highlight ipy %}
-In [17]: if not None:
-    print "Yes, not none."
+In [17]: if not None: print "Yes, not none."
 Yes, not none.
 
 {% endhighlight %}
@@ -276,7 +275,7 @@ Let's check the next one - `__delattr__`.
 
 {% highlight ipy %}
 In [26]: None.__delattr__
-Out[26]: <method-wrapper '__delattr__' of NoneType object at 0x1054527d8>
+Out[26]: <method-wrapper '__delattr__' of NoneType object at 0x10c00d7d8>
 {% endhighlight %}
 
 Okay, it's a method-wrapper. Guess that means it's like a method. Let's try calling it.
@@ -390,20 +389,20 @@ Wow, we just discovered that the 'dot' operator really just calls the `__getattr
 In [38]: for name in dir(None):
     print name, " -> ", None.__getattribute__(name)
 __class__  ->  <type 'NoneType'>
-__delattr__  ->  <method-wrapper '__delattr__' of NoneType object at 0x1054527d8>
+__delattr__  ->  <method-wrapper '__delattr__' of NoneType object at 0x10c00d7d8>
 __doc__  ->  None
-__format__  ->  <built-in method __format__ of NoneType object at 0x1054527d8>
-__getattribute__  ->  <method-wrapper '__getattribute__' of NoneType object at 0x1054527d8>
-__hash__  ->  <method-wrapper '__hash__' of NoneType object at 0x1054527d8>
-__init__  ->  <method-wrapper '__init__' of NoneType object at 0x1054527d8>
-__new__  ->  <built-in method __new__ of type object at 0x105458a60>
-__reduce__  ->  <built-in method __reduce__ of NoneType object at 0x1054527d8>
-__reduce_ex__  ->  <built-in method __reduce_ex__ of NoneType object at 0x1054527d8>
-__repr__  ->  <method-wrapper '__repr__' of NoneType object at 0x1054527d8>
-__setattr__  ->  <method-wrapper '__setattr__' of NoneType object at 0x1054527d8>
-__sizeof__  ->  <built-in method __sizeof__ of NoneType object at 0x1054527d8>
-__str__  ->  <method-wrapper '__str__' of NoneType object at 0x1054527d8>
-__subclasshook__  ->  <built-in method __subclasshook__ of type object at 0x105452988>
+__format__  ->  <built-in method __format__ of NoneType object at 0x10c00d7d8>
+__getattribute__  ->  <method-wrapper '__getattribute__' of NoneType object at 0x10c00d7d8>
+__hash__  ->  <method-wrapper '__hash__' of NoneType object at 0x10c00d7d8>
+__init__  ->  <method-wrapper '__init__' of NoneType object at 0x10c00d7d8>
+__new__  ->  <built-in method __new__ of type object at 0x10c013a60>
+__reduce__  ->  <built-in method __reduce__ of NoneType object at 0x10c00d7d8>
+__reduce_ex__  ->  <built-in method __reduce_ex__ of NoneType object at 0x10c00d7d8>
+__repr__  ->  <method-wrapper '__repr__' of NoneType object at 0x10c00d7d8>
+__setattr__  ->  <method-wrapper '__setattr__' of NoneType object at 0x10c00d7d8>
+__sizeof__  ->  <built-in method __sizeof__ of NoneType object at 0x10c00d7d8>
+__str__  ->  <method-wrapper '__str__' of NoneType object at 0x10c00d7d8>
+__subclasshook__  ->  <built-in method __subclasshook__ of type object at 0x10c00d988>
 
 {% endhighlight %}
 
