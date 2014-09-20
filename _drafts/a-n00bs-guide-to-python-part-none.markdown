@@ -473,3 +473,4 @@ Out[48]: True
 Yes indeed! Aww wait, we learnt nothing interesting about `None` - it only has all the same things that every other `object` has, i.e. everything else... :( So it really *doesn't* do anything interesting.
 
 Well, this sucks, and we've run out of time. Guess we'll have to call it a day and hopefully next time using `True` and `False` will impart more wisdom to us!
+
