@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Python Concepts: Part None"
-date: 2014-09-22 17:30:00 +0100
+date: 2014-09-20 17:30:00 +0100
 comments: true
 categories:
 ---
