@@ -15,10 +15,10 @@ extra filter as he did originally - by digging more into Jinja2.
 
 What's the problem?
 
-1. A host group in ansible is a list of their addresses - e.g.
+*1.* A host group in ansible is a list of their addresses - e.g.
 `["foo.example.com", "bar.example.com"]`
 
-2. `hostvars` is a dictionary of all the known 'facts' for each system, e.g.:
+*2.* `hostvars` is a dictionary of all the known 'facts' for each system, e.g.:
 
 ```json
 {
@@ -31,7 +31,7 @@ What's the problem?
 }
 ```
 
-3. Given a host group, we want to create a single string that is the
+*3.* Given a host group, we want to create a single string that is the
 comma-separated concatenation of all of their ip4 addresses from `hostvars`.
 
 It uses a few of the lesser-used jinja2 features which I'll talk through.
