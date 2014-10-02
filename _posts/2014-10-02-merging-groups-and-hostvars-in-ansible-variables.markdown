@@ -100,7 +100,8 @@ the string you pass it on its 2nd+ calls. It's better documented [on Jinja2
   itself] [2].
 
 Anyway, this was fun... especially since I didn't need to implement round-robin
-DNS myself in the end!
+DNS myself in the end! Also, there is maybe an easier way and I don't know it.
+If you know, please tell me.
 
 
 [1]: http://www.danielhall.me/2014/09/creating-rr-records-in-route53-with-ansible/
