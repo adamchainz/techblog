@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ansible nginx changes"
+title: "Validating Ansible changes"
 date: 2014-10-31 15:30:00 +0100
 comments: true
 ---
