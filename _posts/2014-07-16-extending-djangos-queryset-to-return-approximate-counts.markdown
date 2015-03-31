@@ -6,6 +6,15 @@ comments: true
 categories:
 ---
 
+**UPDATE:** I've re-written and open-sourced a better way of doing the below as
+part of my library `django-mysql`.
+[The docs there on approximate counting]
+(http://django-mysql.readthedocs.org/en/latest/queryset_extensions.html#approximate-counting)
+are just as good a read as the below, and you can `pip install` the
+solution.
+
+---
+
 I was looking through the
 [MySQL slow_log](http://dev.mysql.com/doc/refman/5.5/en/slow-query-log.html)
 for [YPlan](http://yplanapp.com) and discovered that there were a lot of
