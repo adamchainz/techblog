@@ -10,7 +10,7 @@ categories:
 
 My [last blog post] [last] was written in IPython notebook, and my blog is in Jekyll. Here's how I hooked the two up.
 
-[last]: {% post_url 2014-09-20-python-concepts-part-none %}
+[last]: {{ site.baseurl }}{% post_url 2014-09-20-python-concepts-part-none %}
 
 First, I started by writing the first draft of the post in IPython notebook. You can do that by firing up the notebook server with:
 
