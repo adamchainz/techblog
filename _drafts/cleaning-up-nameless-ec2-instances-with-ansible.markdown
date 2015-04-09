@@ -1,87 +1,90 @@
 ---
 layout: post
-title: "Cleaning Up Untagged EC2 Instances with Ansible"
-date: 2015-04-09 20:10:00 +0100
+title: "Cleaning Up Nameless EC2 Instances with Ansible"
+date: 2015-04-09 22:00:00 +0100
 comments: true
 categories:
 ---
 
 ![Anonymous Instances - AAaaahaaa]
-({{ site.baseurl }}/assets/anonymous-instances.jpg)
+({{ site.baseurl }}/assets/2015-04-09-anonymous-instances.jpg)
 
 
-I gave a talk at the recent London Ansible Meetup on how I cleared up strange,
-expensive blank/'anonymous' EC2 instances from our account at work. This is the
-blog post version of that talk, so you too can stop them from sitting around
-and sapping money from your account.
+I gave a talk at the recent London Ansible Meetup on how I cleared up
+unexplained nameless/'anonymous' EC2 instances from our AWS account at YPlan.
+This is the blog post version of that talk, so you can follow along and stop
+such instances appearing on your account and sapping money!
 
-Just want the code? Head to the bottom!
+If you know what I'm talking and just want the code, you can head direct to the
+bottom where there's a link to a gist.
 
 
 ## The Problem
 
 I had a problem on EC2. Blank instances were appearing on the account! They
 were totally 'anonymous' - no name, no tags, no CPU/network usage (not now, not
-since they were launched). And whenever I spotted them on the console, they'd
+since they were launched). Whenever I spotted them on the console, they'd
 normally been running for a couple weeks; though I probably look at the console
 every day, it's very hard to notice blank rows!
 
-
-I had to investigate where they were coming from. At first I suspected AWS
-might just be padding out the bill, but digging further into the logs, I
+I investigated where they were coming from. At first I suspected AWS might just
+be padding out the bill, but digging further into the Cloudtrail logs, I
 discovered that they had been launched by our Jenkins continuous delivery
 server.
 
-
-The Jenkins build process I set up at YPlan is based around using an Ansible
-playbook to launch an instance (using the **ec2** module),
-provision it with the latest code and dependencies, and then freeze
-it as an Amazon Machine Image (AMI). The AMI is what then gets tested and
-deployed.
-I looked back through the build logs to the times the anonymous instances had
-been started, and found that in each case Jenkins had launched them at the
+Our Jenkins build process at YPlan is uses an Ansible playbook to launch an
+instance (using the **ec2** module), provision it with the latest code and
+dependencies, and then freeze it as an Amazon Machine Image (AMI). The AMI is
+what then gets tested and deployed (if you're interested, it's based upon some
+code from Ansible's
+[immutablish-deploys repo]
+(https://github.com/ansible/immutablish-deploys/blob/master/build_ami.yml)
+). I looked back through the build logs to the times the anonymous instances
+had been started, and found that in each case Jenkins had launched them at the
 start of the normal build process, but it had been cancelled immediately
-afterwards.
-Cancelled builds are a regular occurence, when a developer knows that the
-particular build is not going to be useful since it doesn't contain all the
-necessary code, and they don't want it to block the next one.
+afterwards. Cancelled builds are a regular occurence, when a developer knows
+that the particular build is not going to be useful since it doesn't contain
+all the necessary code, and they don't want it to block the next one.
 
-So it turns out that launching an instance and tagging it (which is when it
-gets a name, since "Name" is just another tags)
-are separate actions on the EC2 API. A normal launch takes around 10 seconds to
-complete, and thus if you kill any EC2 Ansible's **ec2** module right after it has
-sent the launch request, you will be left with a blank, anonymous instance.
+So it turns out that on EC2, launching an instance and tagging it (which is
+when it gets a name, since "Name" is just another tag) are separate actions. A
+launch takes around 10-20 seconds to complete, and thus if you kill the process
+creating the instance (Ansible's **ec2** module) right after it has sent the
+launch request, you will be left with a blank, 'anonymous' instance.
 
 ## The Solution
 
-Now we know what the problem looks like, let's step through a solution. I
-already have a **clean_resources** playbook running on Jenkins every 15 minutes
-for periodic cleanup such as old AMIs from unused builds sitting around. Adding
-another task to that to clean up the anonymous instances sounds reasonable.
+The solution I settled on was simple - a sweeper process to regularly delete
+any such blank instances. I'll walk you through creating that now.
 
-Here's a first version of the task, using the fantastic **ec2_sql** module:
-
-{% raw %}
-```yaml
-- name: delete anonymous instances
-  ec2_sql:
-    sql: DELETE FROM ec2_instances
-         WHERE length(tags) = 0 AND age > 30 minutes
-```
-{% endraw %}
-
-Unfortunately, I appear to be stuck in DBA mode - I completely dreamt up the
-**ec2_sql** module! It *does* look easy to use though, doesn't it?
-
-However it will serve as a framework for the actual task we want, as it has the
-right intent. Here's a more realistic task using actual ansible modules: (Note
-that `local_action` is used to make the termination call from the local
-instance, rather than SSH-ing into the target):
+Firstly, I on my Jenkins instance I already have a **"clean_resources"**
+playbook set to run every 15 minutes, for cleaning up other cloud-cruft such as
+old AMIs. I can just add another play:
 
 {% raw %}
 ```yaml
 - name: delete anonymous instances
   hosts: ec2
+  gather_facts: false
+  tasks:
+    - name: delete anonymous instances
+      ec2_sql: DELETE FROM ec2_instances
+               WHERE length(tags) = 0 AND age > 30 minutes
+```
+{% endraw %}
+
+Unfortunately, I'm stuck in DBA mode and have completely dreamt up the
+**ec2_sql** module! It *does* look easy to use though, doesn't it?
+
+It does clarify what we want though, so it'll work as a good framework for
+creating the actual task. Here's a start with actual Ansible modules, ready to
+terminate instances:
+
+{% raw %}
+```yaml
+- name: delete anonymous instances
+  hosts: ec2
+  gather_facts: false
   tasks:
     - when: "True"  # length(tags) = 0 AND
                     # age > 30 minutes
@@ -90,16 +93,20 @@ instance, rather than SSH-ing into the target):
 ```
 {% endraw %}
 
-Be careful! If you run the above directly, it will just terminate every single
-instance on your AWS account! We need to convert the commented SQL 'WHERE'
-clause into un-commented Jinja2 conditions to make it work. Let's do that piece
-by piece.
+Don't run that though! With the conditionals commented out it will just
+terminate every instance on your account! We first need to convert the two
+parts of the commented SQL 'WHERE' clause into actual Jinja2 code to make it
+work. Let's step through that piece by piece.
+
+**N.B.** Note we're using `local_action` with `ec2` to talk to EC2 from *this*
+machine, rather than try form *that* machine. Thus in my case, this is run
+directly on Jenkins.
 
 
 ### 1. Converting 'length(tags) = 0'
 
-For the inventory we're using the **ec2.py** script that comes with Ansible. It
-gets all your instances from the AWS API and returns them ready for Ansible,
+For the inventory I'm using the **ec2.py** script that comes with Ansible. It
+gets all the instances from the EC2 API and returns them ready for Ansible,
 with lots of `ec2_*` variables defined automatically. The tag variables all
 start with `ec2_tag_`, like so:
 
