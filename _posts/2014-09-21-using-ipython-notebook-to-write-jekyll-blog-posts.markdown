@@ -3,7 +3,7 @@ layout: post
 title: "Using IPython Notebook to Write Jekyll Blog Posts"
 date: 2014-09-21 11:00:00 +0100
 comments: true
-categories: [python, jekyll]
+tags: [python, jekyll]
 ---
 
 ![Yup, that's a Python]({{ site.baseurl }}/assets/2014-09-21-python.jpg "Skin of Huge Python - Palawan")

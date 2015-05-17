@@ -3,7 +3,7 @@ layout: post
 title: "Some Ansible Hints"
 date: 2014-07-12 21:38:16 +0100
 comments: true
-categories: [ansible]
+tags: [ansible]
 ---
 
 Three useful little tidbits for using Ansible that I've come across.

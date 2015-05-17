@@ -2,7 +2,7 @@
 layout: post
 title: "Installing and Removing R Packages With Ansible"
 date: 2014-07-19 10:10:00 +0100
-categories: [ansible, r]
+tags: [ansible, r]
 ---
 
 I was asked by some of our Data Scientists to get a few R packages onto their

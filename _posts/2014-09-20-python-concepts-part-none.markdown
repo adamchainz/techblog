@@ -3,7 +3,7 @@ layout: post
 title: "Python Concepts: Part None"
 date: 2014-09-20 17:30:00 +0100
 comments: true
-categories: [python]
+tags: [python]
 ---
 
 ![Space. The closest thing to a picture of nothing that's not blank.]({{ site.baseurl }}/assets/2014-09-17-big-dipper.jpg)

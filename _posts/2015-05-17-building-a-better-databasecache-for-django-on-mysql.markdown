@@ -3,7 +3,7 @@ layout: post
 title: "Building a better DatabaseCache for Django on MySQL"
 date: 2015-05-17 11:30:00 +0100
 comments: true
-categories: [django, mysql]
+tags: [django, mysql]
 ---
 
 ![Figure 1 - MySQLCache in the flesh]

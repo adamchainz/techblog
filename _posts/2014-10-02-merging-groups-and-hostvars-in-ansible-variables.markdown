@@ -3,7 +3,7 @@ layout: post
 title: "Merging groups and hostvars in Ansible variables"
 date: 2014-10-02 22:30:00 +0100
 comments: true
-categories: [ansible]
+tags: [ansible]
 ---
 
 ![Tools of the trade.] ({{ site.baseurl }}/assets/2014-10-02-swords.jpg)

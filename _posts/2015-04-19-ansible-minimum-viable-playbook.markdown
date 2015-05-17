@@ -3,7 +3,7 @@ layout: post
 title: "An Ansible MVP (Minimum Viable Playbook) for Testing Tasks"
 date: 2015-04-18 20:25:00 +0100
 comments: true
-categories: [ansible]
+tags: [ansible]
 ---
 
 ![MVPs are tiny.] ({{ site.baseurl }}/assets/2015-04-19-ansible-mvp.jpg)

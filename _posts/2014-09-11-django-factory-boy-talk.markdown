@@ -3,7 +3,7 @@ layout: post
 title: 'My Talk "Factory Boy Fun" at Django London Meetup'
 date: 2014-09-11 22:00:00 +0100
 comments: true
-categories: [django]
+tags: [django]
 ---
 
 On Tuesday I gave another talk at the [London Django Meetup Group] [1], titled

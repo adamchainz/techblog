@@ -3,7 +3,7 @@ layout: post
 title: "Factory Boy Fun"
 date: 2014-09-03 21:20:00 +0100
 comments: true
-categories: [django]
+tags: [django]
 ---
 
 ![Factory.]
