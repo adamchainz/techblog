@@ -3,7 +3,7 @@ layout: post
 title: "Extending Django's QuerySet to return approximate COUNTs"
 date: 2014-07-16 21:15:16 +0100
 comments: true
-categories:
+categories: [django, mysql]
 ---
 
 **UPDATE:** I've re-written and open-sourced a better way of doing the below as

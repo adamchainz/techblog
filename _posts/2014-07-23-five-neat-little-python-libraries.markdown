@@ -2,7 +2,7 @@
 layout: post
 title: "Five Neat Little Python Libraries"
 date: 2014-07-23 20:36:16 +0100
-categories:
+categories: [python]
 ---
 
 Here are some great little Python libraries that have made my life (well, at

@@ -3,6 +3,7 @@ layout: post
 title: "Validating Ansible changes"
 date: 2014-10-31 15:30:00 +0100
 comments: true
+categories: [ansible]
 ---
 
 ![Engine X] ({{ site.baseurl }}/assets/2014-10-31-engine.jpg)

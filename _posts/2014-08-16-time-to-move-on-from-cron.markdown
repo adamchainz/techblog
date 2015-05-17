@@ -3,7 +3,7 @@ layout: post
 title: Time to Move on From Cron
 date: 2014-08-16 18:00:00 +0100
 comments: true
-categories:
+categories: [python]
 ---
 
 ![Clock clock clock clock clock clock clock clock clock clock clock clock clock]

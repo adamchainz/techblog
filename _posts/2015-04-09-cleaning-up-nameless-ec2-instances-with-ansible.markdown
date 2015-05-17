@@ -3,7 +3,7 @@ layout: post
 title: "Cleaning Up Nameless EC2 Instances with Ansible"
 date: 2015-04-09 22:00:00 +0100
 comments: true
-categories:
+categories: [ansible, aws]
 ---
 
 ![Anonymous Instances - AAaaahaaa]

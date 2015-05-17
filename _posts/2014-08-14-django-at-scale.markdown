@@ -3,7 +3,7 @@ layout: post
 title: 'My Talk "Django at scale" at Django London Meetup'
 date: 2014-08-14 22:45:00 +0100
 comments: true
-categories:
+categories: [django]
 ---
 
 On Tuesday I gave a talk on Django at the [London Django Meetup Group] [1],
