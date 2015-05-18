@@ -78,7 +78,7 @@ forward to the next meetup!
 
 
 [1]: http://www.meetup.com/The-London-Django-Meetup-Group/
-[2]: {% post_url 2014-07-16-extending-djangos-queryset-to-return-approximate-counts %}
+[2]: {{ site.baseurl }}{% post_url 2014-07-16-extending-djangos-queryset-to-return-approximate-counts %}
 [3]: http://www.celeryproject.org/
 [4]: http://www.postgresql.org/docs/9.3/static/runtime-config-client.html#GUC-STATEMENT-TIMEOUT
 [5]: http://mysqlserverteam.com/server-side-select-statement-timeouts/

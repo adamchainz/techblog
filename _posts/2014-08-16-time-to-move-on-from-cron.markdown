@@ -170,7 +170,7 @@ there!
 [1]: https://github.com/grahambell/crab
 [2]: http://azkaban.github.io/
 [3]: https://github.com/dbader/schedule
-[4]: {% post_url 2014-07-23-five-neat-little-python-libraries %}
+[4]: {{ site.baseurl }}{% post_url 2014-07-23-five-neat-little-python-libraries %}
 [5]: http://supervisord.org/
 [6]: http://getsentry.com/
 [7]: http://logstash.net/

@@ -19,4 +19,4 @@ through the slides quickly for an overview, here they are:
 
 
 [1]: http://www.meetup.com/The-London-Django-Meetup-Group/
-[2]: {% post_url 2014-09-03-factory-boy-fun %}
+[2]: {{ site.baseurl }}{% post_url 2014-09-03-factory-boy-fun %}

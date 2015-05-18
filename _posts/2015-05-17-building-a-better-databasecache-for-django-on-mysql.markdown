@@ -115,7 +115,7 @@ MySQL-specific syntax and features. My full list of improvements includes:
   only way it can do this is to run `SELECT COUNT(*)`, which will cause a table
   scan on most database backends, especially on MySQL+InnoDB, as I’ve [written
   about being slow before]
-  ({% post_url 2014-07-16-extending-djangos-queryset-to-return-approximate-counts %}).
+  ({{ site.baseurl }}{% post_url 2014-07-16-extending-djangos-queryset-to-return-approximate-counts %}).
   <br>
   <br>
   With `MySQLCache` the cull-check behaviour becomes probabilistic, by default

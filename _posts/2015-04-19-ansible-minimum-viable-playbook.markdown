@@ -10,7 +10,7 @@ tags: [ansible]
 
 I showed this briefly in my post on
 [merging groups and hostvars]
-({{ site.url }}{% post_url 2014-10-02-merging-groups-and-hostvars-in-ansible-variables %}),
+({{ site.baseurl }}{% post_url 2014-10-02-merging-groups-and-hostvars-in-ansible-variables %}),
 but I thought it was worth writing a whole post on. The Minimum Viable Playbook
 (MVP) is the shortest, most useful Ansible playbook I have. Whenever I need to
 write some Ansible code and I'm not entirely sure I'm doing it right (which is
