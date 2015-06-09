@@ -3,7 +3,7 @@ layout: post
 title: "Making Ansible a Bit Faster"
 date: 2015-05-18 22:00:00 +0100
 comments: true
-categories:
+tags: [ansible]
 ---
 
 ![Jaguars are fast]

@@ -3,7 +3,7 @@ layout: post
 title: "DevOps Exchange London: Continuous Delivery"
 date: 2014-07-29 06:51:06 +0100
 comments: true
-categories:
+tags: [devops]
 ---
 
 Last Thursday (24th July 2014) I went to the DevOps Exchange London Meetup on

@@ -28,3 +28,8 @@ version:          2.1.0
 
 github:
   repo:           https://github.com/adamchainz/techblog
+
+
+# jekyll-tagging plugin
+tag_page_layout: tag_page
+tag_page_dir: tag
