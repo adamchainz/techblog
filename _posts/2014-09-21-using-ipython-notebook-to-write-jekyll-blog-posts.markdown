@@ -57,15 +57,15 @@ The first thing I discovered is that `.ipynb` files are stored in the `json` for
 
 Brilliant. I can get at the cells in the notebook easily, and I can already see that for markdown cells the text is stored line-by-line in a list called `source` - won't be hard to convert that at all. The next step was to fire up IPython and load that json:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [1]: import json
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [2]: nb = json.load(open('2014-09-20-python-concepts-part-none.ipynb'))
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [3]: nb['worksheets'][0]['cells'][4]
 Out[3]: {u'cell_type': u'markdown',
  u'metadata': {},
@@ -74,7 +74,7 @@ Out[3]: {u'cell_type': u'markdown',
 
 That worked well. After a little more inspection I figured out how the notebook stored code with `input` and `output` as well as the different `output_type` options, for example:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [4]: nb['worksheets'][0]['cells'][3]
 Out[4]: {u'cell_type': u'code',
  u'collapsed': False,
@@ -101,7 +101,7 @@ And it forgets about them.
 
 The next thing was highlighting. Jekyll is using Pygments' `pygmentize` command to add syntax highlighting to code blocks, and IPython's `nbconvert` library contains some extra lexers for properly highlighting the IPython prompts:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [5]: "Like this"
 Out[5]: 'Like this'
 {% endhighlight %}

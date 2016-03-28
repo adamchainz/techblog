@@ -35,7 +35,7 @@ def with_constructor():
 Now I can I time them with IPython `%timeit` magic: (Macbook Pro, 2.6GHz. Using
 Python 2.7 but the numbers on 3.4 were very similar)
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [2]: %timeit with_literal()
 10000000 loops, best of 3: 194 ns per loop
 
@@ -59,7 +59,7 @@ def with_constructor2():
 
 Timing:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [4]: %timeit with_literal2()
 1000000 loops, best of 3: 583 ns per loop
 
@@ -72,7 +72,7 @@ Again, around the literal method is around twice as fast! What's going on?
 We can disassemble the functions to a text representation of the underlying
 bytecode (what the Python VM actually executes) using the `dis` module:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [6]: import dis
 
 In [7]: dis.dis(with_literal)

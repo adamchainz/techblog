@@ -18,13 +18,13 @@ I'm writing this post in **IPython**. If you want to follow along at home, get y
 
 Now, let's start. Let's see what happens if ask for nothing:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [1]: None
 {% endhighlight %}
 
 No output - makes sense. Let's try outputting it to screen though:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [2]: print None
 None
 
@@ -32,7 +32,7 @@ None
 
 Aha, we get some output. `print` turns its input into a string so it can be output - and the `str`ing output of `None` is `'None'`. Let's check that `str`ing representation:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [3]: str(None)
 Out[3]: 'None'
 {% endhighlight %}
@@ -41,7 +41,7 @@ Now, since we didn't use print, the output comes from the IPython prompt, with a
 
 So if we print again, there is no output prompt, since the print statement evaluates to nothing. Let's try `print`ing the `str`ing of `None`:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [4]: print str(None)
 None
 
@@ -51,11 +51,11 @@ Brilliant.
 
 Anyway, the string `"None"` is *something*, and we're here to investigate nothing. Let's use an IPython feature to find out more about it:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [5]: None?
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 Type:        NoneType
 String form: None
 Namespace:   Python builtin
@@ -70,11 +70,11 @@ The **String Form** there - that's what you get when you pass `None` to `str` as
 
 There's no **docstring** - this is a way of adding documentation to objects in Python for users to access. Let's check for a docstring on another object we know about:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [6]: str?
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 Type:        type
 String form: <type 'str'>
 Namespace:   Python builtin
@@ -89,7 +89,7 @@ Ah, `str`'s docstring is much more instructive - and it tells us how to do what 
 
 But its **type** is **type**? This means we can make fresh `str` objects by calling the type:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [7]: str()
 Out[7]: ''
 {% endhighlight %}
@@ -98,7 +98,7 @@ And tada, a blank `str`ing appears.
 
 Can we do that with the `NoneType` I wonder?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [8]: NoneType()
 ---------------------------------------------------------------------------
 NameError                                 Traceback (most recent call last)
@@ -110,16 +110,16 @@ NameError: name 'NoneType' is not defined
 
 Uh-oh. Looks like we don't actually have `NoneType` available in our current namespace - just `None`. But luckily, we can ask for the type of `None`, store it in a variable, and call that:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [9]: type(None)
 Out[9]: NoneType
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [10]: local_none_type = type(None)
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [11]: local_none_type()
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -131,22 +131,22 @@ TypeError: cannot create 'NoneType' instances
 
 Dang. We can have a handle on the `NoneType` type, but we can't make any more of it. This is actually a special rule for the `NoneType`... Does it mean there is only ever one `None`?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [12]: a = None
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [13]: b = None
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [14]: a == b
 Out[14]: True
 {% endhighlight %}
 
 Well, they're equal, that's a start. But can we check that `a` and `b` are *exactly* the same thing?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [15]: a is b
 Out[15]: True
 {% endhighlight %}
@@ -161,20 +161,20 @@ Let's have a break with a quote on nothing:
 ![Marcus Aurelius]({{ site.baseurl }}/assets/2014-09-17-marcus-aurelius.png)
 
 > Nothing proceeds from nothingness, as also nothing passes away into non-existence.
-> 
+>
 > -- Marcus Aurelius, Meditations, IV, 4
 
 ---
 
 Let's continue; I wonder if `None` can be checked against:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [16]: if None: print "Yes, none."
 {% endhighlight %}
 
 Oh, nothing happened. Let's see what happens if we go the other way:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [17]: if not None: print "Yes, not none."
 Yes, not none.
 
@@ -182,7 +182,7 @@ Yes, not none.
 
 Aha! So `None` is never `True`, and always `False`? Let's just check that by turning it into a `bool`ean:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [18]: bool(None)
 Out[18]: False
 {% endhighlight %}
@@ -193,7 +193,7 @@ That explains why our `if` statement worked that way - `None` gets turned into `
 
 Let's try doing some more day-to-day things with `None`.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [19]: None + None
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -203,7 +203,7 @@ TypeError                                 Traceback (most recent call last)
 TypeError: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [20]: None - None
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -213,7 +213,7 @@ TypeError                                 Traceback (most recent call last)
 TypeError: unsupported operand type(s) for -: 'NoneType' and 'NoneType'
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [21]: None + 0
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -227,7 +227,7 @@ So, you can't really do anything. Makes sense that you do (nearly) nothing with 
 
 Let's check its `dir`ectory of methods though - maybe it has something it hasn't told us yet.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [22]: dir(None)
 Out[22]: ['__class__',
  '__delattr__',
@@ -248,7 +248,7 @@ Out[22]: ['__class__',
 
 Wow, that's a lot of things! How many things?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [23]: len(dir(None))
 Out[23]: 15
 {% endhighlight %}
@@ -257,14 +257,14 @@ Wow, there are actually **15** things that `None` can do!?
 
 Let's try from the top...
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [24]: None.__class__
 Out[24]: NoneType
 {% endhighlight %}
 
 `NoneType` again? I thought we already got that guy with `type`! Is that the same `NoneType` really?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [25]: type(None) is None.__class__
 Out[25]: True
 {% endhighlight %}
@@ -273,14 +273,14 @@ Okay, that's boring - just another way to get ahold of that `__class__` it looks
 
 Let's check the next one - `__delattr__`.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [26]: None.__delattr__
 Out[26]: <method-wrapper '__delattr__' of NoneType object at 0x10c00d7d8>
 {% endhighlight %}
 
 Okay, it's a method-wrapper. Guess that means it's like a method. Let's try calling it.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [27]: None.__delattr__()
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -292,7 +292,7 @@ TypeError: expected 1 arguments, got 0
 
 Okay, you want an argument? I'll give you an argument!
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [28]: None.__delattr__("argument")
 ---------------------------------------------------------------------------
 AttributeError                            Traceback (most recent call last)
@@ -304,7 +304,7 @@ AttributeError: 'NoneType' object has no attribute 'argument'
 
 Oh, you want an argument that's the name of an *attribute*? Why didn't you say? We already know the name of an attribute that we don't need - `__class__` is something we can get by calling `type` - so let's try saving some space by getting rid of that:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [29]: None.__delattr__("__class__")
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -318,7 +318,7 @@ Well that's annoying, but I guess it's okay for python to have some protection o
 
 I give up, let's try the next one.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [30]: None.__doc__
 {% endhighlight %}
 
@@ -326,19 +326,19 @@ Oh great, nothing. This is actually the attribute that stores an object's docstr
 
 Let's check by getting the `str` docstring in the same way:
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [31]: str.__doc__
 Out[31]: "str(object='') -> string\n\nReturn a nice string representation of the object.\nIf the argument is a string, the return value is the same object."
 {% endhighlight %}
 
 Yup, that's the string, although the new-line characters have been displayed as `\\n`. Next!
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [32]: None.__format__
 Out[32]: <function __format__>
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [33]: None.__format__()
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -348,7 +348,7 @@ TypeError                                 Traceback (most recent call last)
 TypeError: __format__() takes exactly 1 argument (0 given)
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [34]: None.__format__(None)
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -360,13 +360,13 @@ TypeError: argument to __format__ must be unicode or str
 
 Okay, let's pass in an empty str.
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [35]: None.__format__("")
 Out[35]: 'None'
 {% endhighlight %}
 
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [36]: None.__getattribute__()
 ---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
@@ -378,14 +378,14 @@ TypeError: expected 1 arguments, got 0
 
 Let's try giving it the name of an attribute...
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [37]: None.__getattribute__("__class__")
 Out[37]: NoneType
 {% endhighlight %}
 
 Wow, we just discovered that the 'dot' operator really just calls the `__getattribute__` method of the object! So you can get any attribute that way? Let's try getting them all!
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [38]: for name in dir(None):
     print name, " -> ", None.__getattribute__(name)
 __class__  ->  <type 'NoneType'>
@@ -410,24 +410,24 @@ Wow, that saved some work, checking what they are and where they are from! Most 
 
 Wait, is `None` an `object` ?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [39]: isinstance(None, object)
 Out[39]: True
 {% endhighlight %}
 
 Apparently so! What else is an `object`?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [40]: isinstance(object, object)
 Out[40]: True
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [41]: isinstance(type(None), object)
 Out[41]: True
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [42]: isinstance(type, object)
 Out[42]: True
 {% endhighlight %}
@@ -436,7 +436,7 @@ Well, I heard python is object-oriented, but it seems oriented towards making *e
 
 So what does that mean? Does object have some stuff on it that you can do anywhere or something?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [43]: dir(object)
 Out[43]: ['__class__',
  '__delattr__',
@@ -455,14 +455,14 @@ Out[43]: ['__class__',
  '__subclasshook__']
 {% endhighlight %}
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [44]: len(dir(object))
 Out[44]: 15
 {% endhighlight %}
 
 Holy smokes, that's like the same list that `None` has! Wait, is it exactly the same list?
 
-{% highlight ipy %}
+{% highlight ipython %}
 In [45]: dir(object) == dir(None)
 Out[45]: True
 {% endhighlight %}

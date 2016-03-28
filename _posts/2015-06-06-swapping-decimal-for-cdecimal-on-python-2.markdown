@@ -92,7 +92,7 @@ sys.modules['decimal'] = cdecimal
 
 Then it's done! It's quite easy to test, for example using `ipython`:
 
-```ipy
+```ipython
 In [1]: import decimal, cdecimal
 
 In [2]: decimal is cdecimal
@@ -102,7 +102,7 @@ Out[2]: True
 You can also check other modules are importing `cdecimal`, e.g.
 `simplejson.encoder` which does `from decimal import Decimal`:
 
-```ipy
+```ipython
 In [3]: import simplejson.encoder
 
 In [4]: simplejson.encoder.Decimal is cdecimal.Decimal
