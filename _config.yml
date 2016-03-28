@@ -4,6 +4,9 @@ redcarpet:
   extensions: [tables]
 highlighter:      pygments
 
+gems:
+  - jekyll-paginate
+
 # Permalinks
 permalink:        pretty
 
