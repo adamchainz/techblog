@@ -1,36 +1,38 @@
 # Dependencies
-markdown:         redcarpet
+markdown: redcarpet
 redcarpet:
   extensions: [tables]
-highlighter:      pygments
+highlighter: pygments
 
 gems:
   - jekyll-paginate
 
 # Permalinks
-permalink:        pretty
+permalink: pretty
 
 # Setup
-title:            Adam’s Tech Blog
-tagline:          'Hacks and Magic'
-description:      'Filled with little coding notes and fixes. Also check out my <a href="http://adamj.eu">main blog</a> for an ‘online magazine experience.’'
-url:              http://adamj.eu/tech/
-baseurl:          /tech
+title: Adam’s Tech Blog
+tagline: 'Hacks and Magic'
+description: >
+  Filled with little coding notes and fixes. Also check out my
+  <a href="http://adamj.eu">main blog</a> for an ‘online magazine experience.’
+url: http://adamj.eu/tech/
+baseurl: /tech
 
-exclude:          ['*.ipynb', '*.py']
+exclude: ['*.ipynb', '*.py']
 
 author:
-  name:           'Adam Johnson'
-  url:            https://github.com/adamchainz
-  email:          me@adamj.eu
+  name: 'Adam Johnson'
+  url: https://github.com/adamchainz
+  email: me@adamj.eu
 
-paginate:         10
+paginate: 10
 
 # Custom vars
-version:          2.1.0
+version: 2.1.0
 
 github:
-  repo:           https://github.com/adamchainz/techblog
+  repo: https://github.com/adamchainz/techblog
 
 
 # jekyll-tagging plugin
