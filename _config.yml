@@ -15,8 +15,8 @@ title: Adam’s Tech Blog
 tagline: 'Hacks and Magic'
 description: >
   Filled with little coding notes and fixes. Also check out my
-  <a href="http://adamj.eu">main blog</a> for an ‘online magazine experience.’
-url: http://adamj.eu/tech/
+  <a href="https://adamj.eu">main blog</a> for an ‘online magazine experience.’
+url: https://adamj.eu/tech/
 baseurl: /tech
 
 exclude: ['*.ipynb', '*.py']
